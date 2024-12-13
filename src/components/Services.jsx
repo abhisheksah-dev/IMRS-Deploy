@@ -32,7 +32,7 @@ function Services() {
       <main
         className="flex-grow bg-cover bg-center py-10 h-[80vh] font-sans "
         style={{
-          backgroundImage: "url('./images/mainlayout.png')",
+          backgroundImage: "url('./images/mainlayout2.svg')",
         }}
       >
         <div className="grid grid-cols-1 md:grid-cols-2  gap-6 px-6 max-w-4xl mx-auto mt-5 w-[100%] h-[100%] md:h-[70%] text-4xl">

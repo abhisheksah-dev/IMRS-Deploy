@@ -19,7 +19,7 @@ const HelplineSection = () => {
             className="text-4xl font-bold text-center text-slate-100 mb-8 bg-[#35045D]
  p-2 rounded-2xl font-sans"
           >
-            Security
+            SECURITY
           </h2>
           <div className="grid grid-cols-1 gap-6">
             {helplineData.map((helpline, index) => (

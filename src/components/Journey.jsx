@@ -221,8 +221,14 @@ function Journey() {
       const calculatedDistance = metroRoute.calculateDistance(from, to);
       const calculatedTime = metroRoute.calculateTime(from, to);
 
+      if (calculatedDistance > 1000) {
+        setDistance(`${calculatedDistance / 1000} km`);
+      } else {
+        setDistance(`${calculatedDistance} m`);
+      }
+
       setFare(`₹${calculatedFare}`);
-      setDistance(`${calculatedDistance} m`);
+
       setTime(`${calculatedTime} min`);
       setStops(stopsCount);
     } else {
@@ -266,8 +272,8 @@ function Journey() {
     <>
       <div className="bg-white  flex justify-center p-6 font-sans mb-6">
         <div className="shadow rounded-lg p-8 w-full max-w-6xl">
-          <h2 className="bg-blue-900 text-center text-2xl text-white p-3 rounded-xl mb-6 font-sans">
-            Journey
+          <h2 className="bg-blue-900 text-center text-3xl  font-bold text-white p-3 rounded-xl mb-6 font-sans">
+            JOURNEY DETAILS
           </h2>
           <div className="grid lg:grid-cols-2 gap-6 ">
             <div className="grid grid-cols-1 gap-0 bg-[#dbeaff]  rounded-xl">
