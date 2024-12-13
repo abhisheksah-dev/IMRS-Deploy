@@ -6,7 +6,7 @@ const ContactUs = () => {
       <div
         className="font-sans flex items-center justify-start min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-gray-800"
         style={{
-          backgroundImage: `url("/images/contact.png")`,
+          backgroundImage: `url("/images/Contact.png")`,
           backgroundPosition: "center",
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
