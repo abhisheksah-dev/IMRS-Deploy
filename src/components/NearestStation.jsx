@@ -159,8 +159,8 @@ function NearestStation() {
     <>
       <div className="bg-white  flex justify-center p-6 font-sans mb-7">
         <div className="shadow-lg rounded-lg p-8 max-w-3xl w-full">
-          <h2 className="bg-blue-900 text-center text-2xl font-bold text-white mb-8 uppercase h-12 rounded-xl">
-            <p className="pt-2">Nearest Station</p>
+          <h2 className="bg-blue-900 text-center text-3xl font-bold text-white mb-8 uppercase h-12 rounded-xl">
+            <p className="pt-2 ">Nearest Station</p>
           </h2>
 
           <div className="bg-blue-100 p-6 rounded-lg mb-8">
