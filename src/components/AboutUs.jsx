@@ -102,7 +102,7 @@ function AboutUs() {
                         {
                           img: "/images/smartcard.png",
                           alt: "Station Information",
-                          title: "Smaert Card",
+                          title: "Smart Card",
                         },
                       ].map((item, index) => (
                         <div
