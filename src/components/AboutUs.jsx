@@ -82,7 +82,7 @@ function AboutUs() {
                         {
                           img: "/images/audio.png",
                           alt: "Audio Indication",
-                          title: "Audio Indication",
+                          title: "Audio Navigator",
                         },
                         {
                           img: "/images/onlineticket.png",
