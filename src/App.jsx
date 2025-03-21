@@ -17,6 +17,7 @@ import AboutUs from "./components/AboutUs";
 import ContactUs from "./components/ContactUs";
 import HorizontalImageScroll from "./components/HorizontalImageScroll";
 import Home from "./components/Home";
+import Payment from "./components/Payment";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -46,6 +47,7 @@ function App() {
             <Route path="/services" element={<Services />} />
             <Route path="/IMRS" element={<AboutUs />} />
             <Route path="/contactUs" element={<ContactUs />} />
+            <Route path="/payment" element={<Payment />} />
           </Routes>
         </Layout>
       </div>
@@ -54,5 +56,3 @@ function App() {
 }
 
 export default App;
-
-//just to check

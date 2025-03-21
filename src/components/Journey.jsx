@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { TfiAlarmClock } from "react-icons/tfi";
 import { FaRoute, FaLocationDot } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
 class StationNode {
   constructor(name, distancePrev, distanceNext) {
@@ -235,6 +236,11 @@ function Journey() {
       alert("Please select valid source and destination stations.");
     }
   };
+  const navigate = useNavigate();
+
+  const handlePayment = () => {
+    navigate("/payment");
+  };
 
   const stations = [
     "Vijay Nagar Square",
@@ -330,40 +336,49 @@ function Journey() {
                 </button>
               </div>
             </div>
+            <div>
+              <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6 font-sans">
+                <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
+                  <i className="text-4xl text-blue-600 mb-4">
+                    <FaLocationDot />
+                  </i>
+                  <h3 className="text-gray-600 font-semibold text-lg font-sans">
+                    Stops
+                  </h3>
+                  <p className="text-blue-900 font-bold text-2xl">{stops}</p>
+                </div>
 
-            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-2 gap-6 font-sans">
-              <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
-                <i className="text-4xl text-blue-600 mb-4">
-                  <FaLocationDot />
-                </i>
-                <h3 className="text-gray-600 font-semibold text-lg font-sans">
-                  Stops
-                </h3>
-                <p className="text-blue-900 font-bold text-2xl">{stops}</p>
+                <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
+                  <i className="text-4xl text-blue-600 mb-4">💳</i>
+                  <h3 className="text-gray-600 font-semibold text-lg">Fare</h3>
+                  <p className="text-blue-900 font-bold text-2xl">{fare}</p>
+                </div>
+
+                <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
+                  <i className="text-4xl text-blue-600 mb-4">
+                    <FaRoute />
+                  </i>
+                  <h3 className="text-gray-600 font-semibold text-lg">
+                    Distance
+                  </h3>
+                  <p className="text-blue-900 font-bold text-2xl">{distance}</p>
+                </div>
+
+                <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
+                  <i className="text-4xl text-blue-600 mb-4">
+                    <TfiAlarmClock />
+                  </i>
+                  <h3 className="text-gray-600 font-semibold text-lg">Time</h3>
+                  <p className="text-blue-900 font-bold text-2xl">{time}</p>
+                </div>
               </div>
-
-              <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
-                <i className="text-4xl text-blue-600 mb-4">💳</i>
-                <h3 className="text-gray-600 font-semibold text-lg">Fare</h3>
-                <p className="text-blue-900 font-bold text-2xl">{fare}</p>
-              </div>
-
-              <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
-                <i className="text-4xl text-blue-600 mb-4">
-                  <FaRoute />
-                </i>
-                <h3 className="text-gray-600 font-semibold text-lg">
-                  Distance
-                </h3>
-                <p className="text-blue-900 font-bold text-2xl">{distance}</p>
-              </div>
-
-              <div className="bg-[#F1FDFF] p-6 shadow-lg rounded-lg flex flex-col items-center border-2 border-blue-600">
-                <i className="text-4xl text-blue-600 mb-4">
-                  <TfiAlarmClock />
-                </i>
-                <h3 className="text-gray-600 font-semibold text-lg">Time</h3>
-                <p className="text-blue-900 font-bold text-2xl">{time}</p>
+              <div className="flex justify-center m-3">
+                <button
+                  className="bg-blue-600 text-xl text-white py-3 px-16 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 font-sans"
+                  onClick={handlePayment}
+                >
+                  Book ticket
+                </button>
               </div>
             </div>
           </div>
