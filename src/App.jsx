@@ -18,6 +18,7 @@ import ContactUs from "./components/ContactUs";
 import HorizontalImageScroll from "./components/HorizontalImageScroll";
 import Home from "./components/Home";
 import Payment from "./components/Payment";
+import TripPlanner from "./components/TripPlanner";
 
 function App() {
   const [loading, setLoading] = useState(false);
@@ -48,6 +49,7 @@ function App() {
             <Route path="/IMRS" element={<AboutUs />} />
             <Route path="/contactUs" element={<ContactUs />} />
             <Route path="/payment" element={<Payment />} />
+            <Route path="/trip" element={<TripPlanner />} />
           </Routes>
         </Layout>
       </div>

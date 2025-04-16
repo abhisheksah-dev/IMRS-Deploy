@@ -1,7 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { TfiAlarmClock } from "react-icons/tfi";
+import { FaRoute, FaLocationDot } from "react-icons/fa6";
+import { useNavigate } from "react-router-dom";
 
-// --- Circular linked list and station classes ---
+// ------------------
+// Circular Linked List Logic
+// ------------------
 class StationNode {
   constructor(name, distancePrev, distanceNext) {
     this.name = name;
@@ -22,6 +27,8 @@ class CircularLinkedList {
     const newNode = new StationNode(name, distancePrev, distanceNext);
     this.head = newNode;
     this.tail = newNode;
+    newNode.next = newNode;
+    newNode.prev = newNode;
   }
 
   insertEnd(name, distancePrev, distanceNext) {
@@ -39,15 +46,20 @@ class CircularLinkedList {
 
   countStations(startStation, endStation) {
     let current = this.head;
+    let startFound = null;
+    let endFound = null;
+
+    // Find start station
     while (current.name !== startStation) {
       current = current.next;
     }
-    const startFound = current;
+    startFound = current;
+    // Find end station
     current = this.head;
     while (current.name !== endStation) {
       current = current.next;
     }
-    const endFound = current;
+    endFound = current;
 
     let forward = startFound;
     let backward = startFound;
@@ -78,15 +90,17 @@ class CircularLinkedList {
   calculateDistance(startStation, endStation) {
     let current = this.head;
     let totalDistance = 0;
+    let startFound = null;
+    let endFound = null;
     while (current.name !== startStation) {
       current = current.next;
     }
-    const startFound = current;
+    startFound = current;
     current = this.head;
     while (current.name !== endStation) {
       current = current.next;
     }
-    const endFound = current;
+    endFound = current;
 
     let forward = startFound;
     let backward = startFound;
@@ -119,8 +133,7 @@ class CircularLinkedList {
   calculateTime(startStation, endStation) {
     const distance = this.calculateDistance(startStation, endStation);
     const stops = this.countStations(startStation, endStation);
-    const stoppageTime = 20;
-    const distanceInKm = distance / 1000;
+    const stoppageTime = 20; // seconds per stop
     const NoncrowdedStations = [
       "BSF/ Kalani Nagar",
       "Airport",
@@ -148,6 +161,9 @@ class CircularLinkedList {
   }
 }
 
+// ------------------
+// Initialize metro route data
+// ------------------
 const metroRoute = new CircularLinkedList();
 metroRoute.insertFirst("Super Corridor 1", 1000, 1500);
 metroRoute.insertEnd("Super Corridor 2", 1500, 1000);
@@ -179,14 +195,30 @@ metroRoute.insertEnd("ISBT/ MR 10 Flyover", 780, 1760);
 metroRoute.insertEnd("MR 10 Road", 1760, 1250);
 metroRoute.insertEnd("Bhawarshala Square", 1250, 1000);
 
+// ------------------
+// Payment Component
+// ------------------
 const Payment = () => {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
+  const [fare, setFare] = useState(0);
   const [responseId, setResponseId] = useState("");
   const [responseState, setResponseState] = useState({});
-  const [paymentId, setPaymentId] = useState(""); // State to capture payment ID input
+  const [paymentId, setPaymentId] = useState("");
+  const navigate = useNavigate();
 
-  // Load external script (Razorpay checkout)
+  // Calculate fare automatically when the source and destination selections change.
+  useEffect(() => {
+    if (from && to && from !== to) {
+      const stopsCount = metroRoute.countStations(from, to);
+      const calculatedFare = metroRoute.calculateFare(stopsCount);
+      setFare(calculatedFare);
+    } else {
+      setFare(0);
+    }
+  }, [from, to]);
+
+  // Function to load Razorpay's script dynamically.
   const loadScript = (src) => {
     return new Promise((resolve) => {
       const script = document.createElement("script");
@@ -197,11 +229,11 @@ const Payment = () => {
     });
   };
 
-  // Create an order via your backend
+  // Function to create Razorpay order. Amount is in paise.
   const createRazorpayOrder = async (amount) => {
     try {
       const data = JSON.stringify({
-        amount: amount,
+        amount: amount, // Amount in paise
         currency: "INR",
       });
       const config = {
@@ -212,29 +244,29 @@ const Payment = () => {
         data: data,
       };
       const response = await axios.request(config);
-      console.log(JSON.stringify(response.data));
+      console.log("Order Response:", response.data);
       handleRazorpayScreen(response.data.amount);
     } catch (error) {
       console.log("Error creating order:", error);
     }
   };
 
-  // Open Razorpay checkout
+  // Function to open Razorpay checkout screen.
   const handleRazorpayScreen = async (amount) => {
     const res = await loadScript(
       "https://checkout.razorpay.com/v1/checkout.js"
     );
     if (!res) {
-      alert("Razorpay SDK failed to load. Are you online?");
+      alert("Razorpay SDK failed to load. Please check your connection.");
       return;
     }
     const options = {
       key: "rzp_test_mRruX6qumRiKsn", // Your Razorpay Key ID
-      amount: amount, // Amount in currency subunits (e.g. paise)
+      amount: amount, // Amount in paise
       currency: "INR",
       name: "IMRS",
       description: "Test Transaction",
-      image: "./images/airplanelogo.png",
+      image: "/images/MetroLogo5.png",
       handler: function (response) {
         setResponseId(response.razorpay_payment_id);
       },
@@ -248,7 +280,7 @@ const Payment = () => {
     paymentObject.open();
   };
 
-  // Fetch payment details using payment ID from state
+  // Function to fetch payment details using the entered Payment ID.
   const handlePaymentFetch = () => {
     axios
       .get(`http://localhost:3000/payment/${paymentId}`)
@@ -261,7 +293,7 @@ const Payment = () => {
       });
   };
 
-  // List of stations for selection
+  // List of stations for the dropdowns.
   const stations = [
     "Vijay Nagar Square",
     "Radisson Square",
@@ -385,6 +417,7 @@ const Payment = () => {
               id="totalFare"
               placeholder="₹0.00"
               disabled
+              value={`₹${fare}`}
               className="w-full px-3 py-2 border border-gray-300 rounded bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-400"
             />
           </div>
@@ -394,13 +427,15 @@ const Payment = () => {
           <button
             type="button"
             className="block w-full py-2 bg-blue-600 text-white text-xl font-bold rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 font-sans"
-            onClick={() => createRazorpayOrder(100)}
+            onClick={() => createRazorpayOrder(fare * 100)} // Convert fare (in rupees) to paise.
           >
             PAYMENT
           </button>
-          {responseId && <p>Response ID: {responseId}</p>}
+          {responseId && (
+            <p className="mt-2 text-center">Response ID: {responseId}</p>
+          )}
         </div>
-        {/* Payment Fetch Section (Not Nested in the Main Form) */}
+        {/* Payment Fetch Section */}
         <div className="pt-2">
           <input
             type="text"
@@ -418,7 +453,7 @@ const Payment = () => {
             Fetch Payment
           </button>
           {responseState.amount && (
-            <ul className="mt-2">
+            <ul className="mt-2 text-center text-gray-700">
               <li>Amount: {responseState.amount / 100} Rs.</li>
               <li>Currency: {responseState.currency}</li>
               <li>Status: {responseState.status}</li>
