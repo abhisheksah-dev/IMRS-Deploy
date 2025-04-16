@@ -2,7 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import Razorpay from "razorpay";
-
+import mongoose from "mongoose";
 dotenv.config();
 const app = express();
 
@@ -11,7 +11,16 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
+//connect to database
+mongoose.connect('mongodb+srv://Abhishek:abhishek@cluster1.gmodt.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1').then(() => {
+  console.log('Connected to MongoDB');
+}).catch((error) => {
+  console.error('Error connecting to MongoDB:', error);
+})
+
 // Routes
+
+
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
